@@ -1,0 +1,19 @@
+train_base_dir = "/home/shravan/Downloads/train/"
+valid_base_dir = "/home/shravan/Downloads/valid/"
+
+
+bert_abs_path = '/home/shravan/Downloads/'
+bert_model_name = 'multi_cased_L-12_H-768_A-12'
+
+
+check_point_path = '/home/shravan/dissertation/bert_model'
+
+
+
+"""
+tensorflow_model_server \
+ --rest_api_port="8501" \
+ --model_name="saved_model" \
+ --model_base_path="/home/shravan/dissertation/bert_model/test_model/"
+"""
+
