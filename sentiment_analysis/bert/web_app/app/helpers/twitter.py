@@ -11,9 +11,11 @@ access_token_secret = 'Eb60sdlg7dPGsW0QZJ0eENSMUNAOoSIoyZWRRWKMAkhqf'
 
 
 def clean_tweet(tweet):
+  tweet = re.sub(r'http\S+', '', tweet)
+  tweet = re.sub(r'@\S+', '', tweet)
+  tweet = re.sub(r'#\S+', '', tweet)
   return tweet
-  #return p.clean(tweet)
-  #return ' '.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
+
 
 def get_tweets():
   auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
