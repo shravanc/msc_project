@@ -165,7 +165,7 @@ history = model.fit(
     validation_split=0.1,
     batch_size=16,
     shuffle=True,
-    epochs=1,
+    epochs=5,
 )
 
 check_point_path = '/home/shravan/dissertation/bert_model'
