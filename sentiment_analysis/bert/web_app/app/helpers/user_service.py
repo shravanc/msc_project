@@ -31,7 +31,7 @@ def get_tokenizer():
 
 
 def convert_text_to_tokens(tokenizer, text):
-  # ================ Convert Text to Tokens ===================================== 
+  # ================ Convert Text to Tokens =====================================
   sentences = [text]
   classes = ['Negative', 'Positive']
   pred_tokens = map(tokenizer.tokenize, sentences)
@@ -41,7 +41,7 @@ def convert_text_to_tokens(tokenizer, text):
   pred_token_ids = map(lambda tids: tids + [0] * (128 - len(tids)), pred_token_ids)
   pred_token_ids = list(pred_token_ids)
   tokens = pred_token_ids
-  # ================ Convert Text to Tokens ===================================== 
+  # ================ Convert Text to Tokens =====================================
   return tokens
 
 
@@ -51,7 +51,6 @@ def predict_sentiment(tokens):
   headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
   body = {'instances': tokens}
 
-  print("----->body--->", body)
   response = requests.post(URL, json=body, headers=headers)
   probability = response.json()['predictions']
   index = np.argmax(probability)
@@ -60,8 +59,9 @@ def predict_sentiment(tokens):
     return 'Positive'
   return 'Negative'
 
+
 def infer(review):
-  tokenizer = get_tokenizer() 
+  tokenizer = get_tokenizer()
   tokens = convert_text_to_tokens(tokenizer, review)
   sentiment = predict_sentiment(tokens)
 

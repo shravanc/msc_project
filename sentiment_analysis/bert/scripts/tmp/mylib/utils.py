@@ -1,6 +1,5 @@
 import os
 import pandas as pd
-import tensorflow as tf
 
 def load_datasets(train_base_dir, valid_base_dir):
 

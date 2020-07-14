@@ -33,8 +33,6 @@ def get_tweets():
       data.append(text)
 
   return data
-  
-  
 
 
 def fetch():
