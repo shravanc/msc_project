@@ -47,7 +47,8 @@ def convert_text_to_tokens(tokenizer, text):
 
 def predict_sentiment(tokens):
   # ================ Predict Sentiment from Tokens ==============================
-  URL ='http://localhost:8501/v1/models/saved_model:predict'
+  URL = 'http://localhost:8501/v1/models/saved_model:predict'
+  URL = 'http://localhost:8501/v1/models/saved_model:predict'
   headers = {'Accept': 'application/json', 'Content-Type': 'application/json'}
   body = {'instances': tokens}
 
