@@ -9,6 +9,17 @@ bert_model_name = 'multi_cased_L-12_H-768_A-12'
 check_point_path = '/home/shravan/dissertation/bert_model'
 
 
+# Code to extract data from json to csv
+data_extraction
+
+# Code to train model 
+scripts
+
+# Code to web application
+web_app
+
+
+
 
 """
 tensorflow_model_server \
