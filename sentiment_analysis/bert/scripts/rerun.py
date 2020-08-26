@@ -15,12 +15,12 @@ from bert.loader import StockBertConfig, map_stock_config_to_params, load_stock_
 from bert.tokenization.bert_tokenization import FullTokenizer
 
 import seaborn as sns
+import matplotlib.pyplot as plt
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
 train_base_dir = "/home/shravan/Downloads/train/"
 valid_base_dir = "/home/shravan/Downloads/valid/"
-train_count = 11
 
 
 def load_datasets():
@@ -116,7 +116,10 @@ def create_model(max_seq_len, bert_ckpt_file):
         bert = BertModelLayer.from_params(bert_params, name='bert')
 
     input_ids = keras.layers.Input(shape=(max_seq_len,), dtype='int32', name='input_ids')
+    print('----intput_ids', input_ids)
     bert_output = bert(input_ids)
+
+    print('bert shape', bert_output.shape)
 
     cls_out = keras.layers.Lambda(lambda seq: seq[:, 0, :])(bert_output)
     cls_out = keras.layers.Dropout(0.5)(cls_out)
@@ -140,14 +143,18 @@ print(data.train_x.shape)
 
 # Training:
 
-model = create_model(data.max_seq_len, bert_ckpt_file)
-
+#model = create_model(data.max_seq_len, bert_ckpt_file)
+check_point_path = '/home/shravan/dissertation/bert_model/saved_model/1'
+model = tf.keras.models.load_model(check_point_path)
 print(model.summary())
 
 model.compile(
-    optimizer=keras.optimizers.Adam(1e-5),
+    #optimizer=keras.optimizers.Adam(1e-5),
+    optimizer=keras.optimizers.Adam(),
     loss=keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-    metrics=['mae']
+    #metrics=[keras.metrics.SparseCategoricalAccuracy(name='acc')]
+    #metrics=['mae']
+    metrics=['acc']
 )
 
 log_dir = 'log/intent_detection' + datetime.datetime.now().strftime("%Y%m%d-%H%M%s")
@@ -156,18 +163,39 @@ tensorboard_callback = keras.callbacks.TensorBoard(log_dir=log_dir)
 history = model.fit(
     x=data.train_x,
     y=data.train_y,
-    validation_split=0.1,
-    batch_size=16,
+    validation_data=(data.test_x, data.test_y),
+    batch_size=32,
     shuffle=True,
-    epochs=1,
+    epochs=5,
     callbacks=[tensorboard_callback]
-
 )
 
-#check_point_path = '/home/shravan/dissertation/bert_model'
-#tf.saved_model.save(model, check_point_path)
+check_point_path = '/home/shravan/dissertation/bert_model/saved_model/1'
+tf.saved_model.save(model, check_point_path)
 # model.save(check_point_path)
 
 
+mae = history.history['acc']
+val_mae = history.history['val_acc']
+epochs = range(len(mae))
+
+accuracy_file = '/home/shravan/aws_scripts/cronjob/accuracy.png'
+plt.figure(figsize=(15,10))
+plt.plot(epochs, mae, label=['Training Accuracy'])
+plt.plot(epochs, val_mae, label=['Validation Accuracy'])
+plt.legend()
+plt.savefig(accuracy_file)
+
+
+loss = history.history['loss']
+val_loss = history.history['val_loss']
+
+
+validation_file = '/home/shravan/aws_scripts/cronjob/validation.png'
+plt.figure(figsize=(15, 10))
+plt.plot(epochs, loss, label=['Training Loss'])
+plt.plot(epochs, val_loss, label=['Validation Loss'])
+plt.legend()
+plt.savefig(validation_file)
 
 

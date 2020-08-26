@@ -11,5 +11,21 @@ bert_config_file = os.path.join(bert_ckpt_dir, "bert_config.json")
 
 
 tokenizer = FullTokenizer(vocab_file=os.path.join(bert_ckpt_dir, 'vocab.txt'))
-t = tokenizer.tokenize('good ದಿನ')
-print(t)
+
+print("===Only Kannada===")
+text = "ಚಳಿಗಾಲ ಬರುತ್ತಿದೆ"
+print("Input Text: ", text)
+t = tokenizer.tokenize(text)
+print("Tokenized Form: ", t)
+
+print("===Only English===")
+text = "Winter is coming"
+print("Input Text: ", text)
+t = tokenizer.tokenize(text)
+print("Tokenized Form: ", t)
+
+print("===Both language")
+text = "ಚಳಿಗಾಲ is coming"
+print("Input Text: ", text)
+t = tokenizer.tokenize(text)
+print("Tokenized Form: ", t)

@@ -18,11 +18,6 @@ import seaborn as sns
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '-1'
 
-RANDOM_SEED = 42
-
-np.random.seed(RANDOM_SEED)
-tf.random.set_seed(RANDOM_SEED)
-
 train_base_dir = "/home/shravan/Downloads/train/"
 valid_base_dir = "/home/shravan/Downloads/valid/"
 train_count = 11
@@ -119,10 +114,7 @@ def create_model(max_seq_len, bert_ckpt_file):
         bert = BertModelLayer.from_params(bert_params, name='bert')
 
     input_ids = keras.layers.Input(shape=(max_seq_len,), dtype='int32', name='input_ids')
-    print('----intput_ids', input_ids)
     bert_output = bert(input_ids)
-
-    print('bert shape', bert_output.shape)
 
     cls_out = keras.layers.Lambda(lambda seq: seq[:, 0, :])(bert_output)
     cls_out = keras.layers.Dropout(0.5)(cls_out)
@@ -171,3 +163,7 @@ history = model.fit(
 check_point_path = '/home/shravan/dissertation/bert_model'
 tf.saved_model.save(model, check_point_path)
 # model.save(check_point_path)
+
+
+
+
